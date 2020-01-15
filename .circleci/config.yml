@@ -1,0 +1,32 @@
+version: 2.1
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:lts
+
+commands:
+  sayhello:
+    description: "A very simple command for demonstration purposes"
+    parameters:
+      to:
+        type: string
+        default: "Hello World"
+    steps:
+      - run: echo << parameters.to >>
+
+    jobs:
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+      - sayhello:
+          to: 'Hello CircleCI'
+
+workflows:
+  just-test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: master
