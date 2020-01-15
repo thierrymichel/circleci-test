@@ -1,12 +1,13 @@
 version: 2.1
 
-defaults: &defaults
-  working_directory: ~/repo
-  docker:
-    - image: circleci/node:lts
+executors:
+  my-executor:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:lts
 
 commands:
-  sayhello:
+  my-command:
     description: "A very simple command for demonstration purposes"
     parameters:
       to:
@@ -15,18 +16,18 @@ commands:
     steps:
       - run: echo << parameters.to >>
 
-    jobs:
-  test:
-    <<: *defaults
+jobs:
+  my-job:
+    executor: my-executor
     steps:
       - checkout
-      - sayhello:
+      - my-command:
           to: 'Hello CircleCI'
 
 workflows:
-  just-test:
+  my-workflow:
     jobs:
-      - test:
+      - my-job:
           filters:
             branches:
               only: master
